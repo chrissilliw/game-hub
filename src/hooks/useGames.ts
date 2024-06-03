@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import apiClient from "../services/api-client";
+import useData from "./useData";
+import { Genre } from "./useGenres";
 
 export interface Platform {
     id: number;
@@ -14,32 +14,7 @@ export interface Game {
     parent_platforms: {platform: Platform}[];
     metacritic: number;
   }
-  
-  interface FetchGamesResponse {
-    const: number;
-    results: Game[];
-  }
 
-
-const useGames = () => {
-    const [games, setGames] = useState<Game[]>([]);
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    
-    useEffect(() => {
-
-        setIsLoading(true);
-        apiClient
-        .get<FetchGamesResponse>("/games")
-        .then((res) => {
-            setGames(res.data.results);
-            setIsLoading(false); 
-        })
-        .catch((err) => setError(err.message));
-    }, []);
-
-    return { games, error, isLoading };
-
-}
+const useGames = (selectedGenre: Genre | null) => useData<Game>('/games', {params: {genres: selectedGenre?.id}}, [selectedGenre?.id]);
 
 export default useGames;
