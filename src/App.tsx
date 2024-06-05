@@ -1,4 +1,4 @@
-import { Grid, GridItem, HStack, Show } from "@chakra-ui/react";
+import { Box, Grid, GridItem, HStack, Show } from "@chakra-ui/react";
 import Navbar from "./components/Navbar/Navbar";
 import GameGrid from "./components/Game/GameGrid";
 import GenreList from "./components/Genres/GenreList";
@@ -7,6 +7,7 @@ import { Genre } from "./hooks/useGenres";
 import PlatformSelector from "./components/Platform/PlatformSelector";
 import { Platform } from "./hooks/useGames";
 import SortSelector from "./components/SortSelector/SortSelector";
+import GameHeading from "./components/Game/GameHeading";
 
 function App() {
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
@@ -15,6 +16,7 @@ function App() {
   );
   const [selectedOrder, setSelectedOrder] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
+
   return (
     <>
       <Grid
@@ -42,24 +44,30 @@ function App() {
           </GridItem>
         </Show>
         <GridItem area="main">
-          <HStack spacing={5} paddingLeft={2} marginBottom={4}>
-            {" "}
-            <PlatformSelector
+          <Box paddingLeft={2} marginTop={6}>
+            <GameHeading
+              selectedGenre={selectedGenre}
               selectedPlatform={selectedPlatform}
-              onSelectPlatform={(platform) => setSelectedPlatform(platform)}
             />
-            <SortSelector
-              sortOrder={selectedOrder}
-              onSelectSortOrder={(sortOrder) => setSelectedOrder(sortOrder)}
-            />
-          </HStack>
+            <HStack spacing={5} paddingTop={2} marginBottom={4}>
+              {" "}
+              <PlatformSelector
+                selectedPlatform={selectedPlatform}
+                onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+              />
+              <SortSelector
+                sortOrder={selectedOrder}
+                onSelectSortOrder={(sortOrder) => setSelectedOrder(sortOrder)}
+              />
+            </HStack>
 
-          <GameGrid
-            selectedPlatform={selectedPlatform}
-            selectedGenre={selectedGenre}
-            selectedOrder={selectedOrder}
-            searchText={searchText}
-          />
+            <GameGrid
+              selectedPlatform={selectedPlatform}
+              selectedGenre={selectedGenre}
+              selectedOrder={selectedOrder}
+              searchText={searchText}
+            />
+          </Box>
         </GridItem>
       </Grid>
     </>
